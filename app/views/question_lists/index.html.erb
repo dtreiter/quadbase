@@ -23,7 +23,11 @@
       </td>
       <td style="text-align:center"><%= question_list.question_list_questions.size %></td>
       <td style="text-align:center"><%= question_list.question_list_members.size %></td>       
-      
+      <td><%= link_to show_icon, question_list %></td>
+      <td><%= link_to edit_icon, edit_question_list_path(question_list) %></td>
+      <td><%= link_to x_icon, question_list, 
+                      :confirm => "Are you sure you want to leave #{question_list.name}?", 
+                      :method => :delete %></td>
   <% end %>
   
       

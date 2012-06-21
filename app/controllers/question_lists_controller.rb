@@ -1,3 +1,5 @@
+# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
+# License version 3 or later.  See the COPYRIGHT file for details.
 
 class QuestionListsController < ApplicationController
   before_filter :include_jquery, :only => [:show, :index]
@@ -21,6 +23,12 @@ class QuestionListsController < ApplicationController
   
   def new
     respond_with(@question_list = QuestionList.new)
+  end
+  
+  def edit
+    @question_list = QuestionList.find(params[:id])
+    raise SecurityTransgression unless present_user.can_update?(@question_list)
+    respond_with(@question_list)
   end
   
   def create

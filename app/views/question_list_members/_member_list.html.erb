@@ -1,0 +1,22 @@
+<%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
+    License version 3 or later.  See the COPYRIGHT file for details. %>
+
+<table class="list" width="70%">
+   <tr>
+      <th width="95%">Name</th>
+      <th width="5%"></th>
+   </tr>
+   <tr id="none_row" <% if !@question_list.question_list_members.empty? %>style="display:none"<% end %>>
+      <td colspan="2">None</td>
+   </tr>
+   <tbody id="question_list_member_list_tbody">
+   
+<% @question_list.question_list_members.each do |question_list_member| %>
+  <%= render :partial => 'question_list_members/member_list_row', :locals => {:question_list_member => question_list_member} %>
+<% end %>
+
+   </tbody>
+</table>
+
+
+</tbody>

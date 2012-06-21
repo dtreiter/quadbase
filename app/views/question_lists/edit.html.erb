@@ -1,0 +1,22 @@
+<%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
+    License version 3 or later.  See the COPYRIGHT file for details. %>
+
+<%= pageHeading("Editing Question List") %>
+
+<% @include_jquery = true %>
+
+<%= render 'form' %>
+
+<br/>
+<div class="sectionHeadingNoUnder">Members</div>
+
+<div style="padding: 0 15px">
+  <%= render :partial => 'question_list_members/member_list' %>
+</div>
+
+<br/>
+
+<%= link_to "Add members ...", new_question_list_question_list_member_path(@question_list), :remote => true %>      
+
+<% @links = [ link_to('Show Question Lists', @question_list), 
+              link_to('My Question Lists', question_lists_path) ] %>
