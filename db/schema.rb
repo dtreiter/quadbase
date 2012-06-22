@@ -252,7 +252,7 @@ ActiveRecord::Schema.define(:version => 20120621191601) do
 
   create_table "user_profiles", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "project_member_email",  :default => true
+    t.boolean  "list_member_email",     :default => true
     t.boolean  "role_request_email",    :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
