@@ -3,12 +3,14 @@ class RenameProjectsToLists < ActiveRecord::Migration
     rename_table :projects, :lists
     change_table :lists do |t|
       t.boolean :is_public
+      t.boolean :has_publicly_viewable_drafts
     end
     rename_table :project_members, :list_members
     rename_column :list_members , :project_id, :list_id
     rename_table :project_questions, :list_questions
     rename_column :list_questions, :project_id, :list_id
     rename_column :user_profiles, :project_member_email, :list_member_email
+    
     
     CommentThread.all.each do |ct|
       if ct.commentable_type == 'Project'
@@ -21,6 +23,7 @@ class RenameProjectsToLists < ActiveRecord::Migration
     rename_table :lists, :projects
     change_table :projects do |t|
       t.remove :is_public
+      t.remove :has_publicly_viewable_drafts
     end
     rename_table :list_members, :project_members
     rename_column :project_members, :list_id, :project_id

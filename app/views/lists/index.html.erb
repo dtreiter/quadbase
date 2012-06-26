@@ -7,7 +7,9 @@
 
 <table class="list" width="100%">
    <tr>
-      <th width="50%">Name</th>
+      <th width="30%">Name</th>
+      <th width="10%" style="text-align:center">Public</th>
+      <th width="10%" style="text-align:center">Drafts</th>
       <th width="20%"></th>
       <th width="15%" style="text-align:center"># Questions</th>
       <th width="15%" style="text-align:center"># Members</th>
@@ -20,11 +22,13 @@
       <% list = member.list %>
      <tr>
        <td><%= link_to list.name, list_path(list) %></td>
-       <td>
+       <td style="text-align:center"><%= list.is_public %>
+       <td style="text-align:center"><%= list.has_publicly_viewable_drafts %>
+       <td style="text-align:center">
          <% if member.is_default %>  
             (DEFAULT)
          <% else %>
-            <%= link_to "Set as default", 
+            <%= link_to "Make default", 
                         list_member_make_default_path(member),
                         :method => :put %>
          <% end %>

@@ -16,6 +16,7 @@ class List < ActiveRecord::Base
   accepts_nested_attributes_for :list_questions, :allow_destroy => true
 
   attr_accessible :name, :list_members_attributes, :list_questions_attributes
+  attr_accessible :is_public, :has_publicly_viewable_drafts
   
   # Returns the default list for the specified user, or nil if it doesn't exist.  
   def self.default_for_user(user)    
@@ -29,7 +30,7 @@ class List < ActiveRecord::Base
     default_member = ListMember.default_for_user(user)
     
     if default_member.nil?
-      new_list = List.create(:name => user.full_name + "'s List")
+      new_list = List.create(:name => user.full_name + "'s List", :is_public => false)
       default_member = ListMember.create(:user => user, :list => new_list)
       default_member.make_default!
     end
@@ -38,7 +39,8 @@ class List < ActiveRecord::Base
   
   
   def self.all_for_user(user)
-    ListMember.all_for_user(user).collect{|wm| wm.list}
+    List.default_for_user!(user) if ListMember.all_for_user(user).empty?
+    ListMember.all_for_user(user).collect{|wm| wm.project}
   end
   
   def is_default_for_user?(user)
@@ -65,14 +67,14 @@ class List < ActiveRecord::Base
 
   def can_be_joined_by?(user)
     !is_member?(user)
-  end
+  end 
   
   #############################################################################
   # Access control methods
   #############################################################################
 
   def can_be_read_by?(user)
-    !user.is_anonymous? && is_member?(user)
+    !user.is_anonymous? && is_member?(user) || is_public
   end
     
   def can_be_created_by?(user)

@@ -1,16 +1,47 @@
-<%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
+ <%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
     License version 3 or later.  See the COPYRIGHT file for details. %>
 
 <% @errors = @list.errors %>
 
 <%= form_for(@list) do |f| %>
 
-   <table class="left_heading">
-      <tr>
-         <th>List Name</th>
-         <td><%= f.text_field :name %></td>
+  <table class="left_heading">
+    <tr>
+      <th>List Name</th>
+        <td><%= f.text_field :name %></td>
+     </tr>
+  </table>
+  <br/>
+
+  <div class="subSectionHeading">List Settings</div>
+  <div class="list_settings">
+    <table>
+      <tr id="is_public">
+        <td>Make this list viewable to the public?</td>
+        <td type="checkbox" ><%= f.check_box :is_public, :id => "is_public_box" %></td>
       </tr>
-   </table>
-   <br/>
-   <%= f.submit(nil , :class => "#{submit_classes}") %>
+      <tr id="view_drafts" <% unless @list.is_public %> 
+                              style="display:none;"
+                              <% end %>>
+        <td>Make this list's drafts viewable to the public?</td>
+        <td type="checkbox" id="drafts_box"> <%= f.check_box :has_publicly_viewable_drafts %></td>
+      </tr>
+    </table>
+  </div>
+  
+  <%= content_for :javascript do %>
+    <%= javascript_tag do %>
+
+      $("#is_public_box").live('click', function() {
+        if ($("#is_public_box:checked").exists()) {
+          $("#view_drafts").slideDown();
+        }
+        else {
+          $("#view_drafts").slideUp();
+        }
+      });
+    <% end %>
+  <% end %>
+  
+  <%= f.submit(nil , :class => "#{submit_classes}") %>
 <% end %>

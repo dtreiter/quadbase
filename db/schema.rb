@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20120621191601) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_public"
+    t.boolean  "has_publicly_viewable_drafts"
   end
 
   create_table "logic_libraries", :force => true do |t|
