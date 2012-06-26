@@ -11,7 +11,6 @@ class RenameProjectsToLists < ActiveRecord::Migration
     rename_column :list_questions, :project_id, :list_id
     rename_column :user_profiles, :project_member_email, :list_member_email
     
-    
     CommentThread.all.each do |ct|
       if ct.commentable_type == 'Project'
         ct.update_attribute :commentable_type, 'List'
