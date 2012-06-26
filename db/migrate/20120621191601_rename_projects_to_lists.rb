@@ -2,8 +2,8 @@ class RenameProjectsToLists < ActiveRecord::Migration
   def up
     rename_table :projects, :lists
     change_table :lists do |t|
-      t.boolean :is_public
-      t.boolean :has_publicly_viewable_drafts
+      t.boolean :is_public, :default => false
+      t.boolean :has_publicly_viewable_drafts, :default => false
     end
     rename_table :project_members, :list_members
     rename_column :list_members , :project_id, :list_id
