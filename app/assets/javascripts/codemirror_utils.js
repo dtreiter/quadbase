@@ -3,6 +3,8 @@
 
 Quadbase.CodeMirrorUtils = function() {
 
+  var assertFail = false;
+
   var fixedLogic = [];
   var codeMirrorEditors = {};
 
@@ -34,10 +36,18 @@ Quadbase.CodeMirrorUtils = function() {
     
         // Evaluate the code
         try {
-          eval(code); 
+          eval(code);
+          assertFail = false;
         } 
         catch (e) {
-          alert("An error occurred when trying to run this code: '" + e.message + "'");
+          if(e.name=="Error"){
+            results_elem.append("Logic Error: '" + e.message + "'");
+            assertFail = true;
+          }
+          else{
+            alert(e.name);
+            alert("An error occurred when trying to run this code: '" + e.message + "'");
+          }
         }
     
         // Copy the exported variables to the results object; then put the existing
@@ -172,17 +182,19 @@ Quadbase.CodeMirrorUtils = function() {
   //        alert(script);
         });
 
-        if (!checkCode(code, results_elem, jj != counter)) return;
+      if (!checkCode(code, results_elem, jj != counter)) return;
       //  alert('past check code');
         existingVariables = runCode(seed++, code, variables, existingVariables, libraryScripts);
       }
 
-      for (variable in existingVariables) {
-        if (existingVariables.hasOwnProperty(variable)) {
-          results_elem.append(variable + ' = ' + existingVariables[variable] + "<br/>");  
+      if(!assertFail){
+        for (variable in existingVariables) {
+          if (existingVariables.hasOwnProperty(variable)) {
+            results_elem.append(variable + ' = ' + existingVariables[variable] + "<br/>");  
+          }
         }
       }
-      
+
       results_elem.show();
     }
   }

@@ -16,7 +16,7 @@
 <% LogicLibraryVersion.all.each do |version| %>
   <%= content_tag :div, :id => "library_#{version.id}", :style => 'display:none' do %>
     //<![CDATA[
-    <%= version.minified_code %>
+    <%= version.minified_code.html_safe %>
     //]]>
   <% end %>
 <% end %>
