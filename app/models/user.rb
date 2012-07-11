@@ -49,12 +49,11 @@ class User < ActiveRecord::Base
   before_create :make_first_user_an_admin
   before_update :validate_at_least_one_admin
 
-  scope :active_users, where(:disabled_at => nil)
-  scope :administrators, where(:is_administrator => true)
-  scope :active_administrators, administrators & active_users
+  scope :active_users, where{disabled_at == nil}
+  scope :administrators, where{is_administrator == true}
+  scope :active_administrators, administrators.merge(active_users)
   scope :subscribers_for, lambda { |comment_thread|
-    joins(:comment_thread_subscriptions).where(:comment_thread_subscriptions => {
-          :comment_thread_id => comment_thread.id})
+    joins{comment_thread_subscriptions}.where{comment_thread_subscriptions.comment_thread_id == comment_thread.id}
   }
   
   def full_name
@@ -172,19 +171,34 @@ private
   end
 
   def self.search(type, text)
-    return Array.new if text.blank?
-    query = text.gsub('%', '') + '%'
-    # Note: % is the wildcard. This allows the user to search for stuff that "begins with" but not "ends with".
+    return User.none if text.blank?
+    
+    # Note: % is the wildcard. This allows the user to search
+    # for stuff that "begins with" but not "ends with".
     case type
     when 'Name'
-      return where(:first_name.matches % query | :last_name.matches % query)
+      u = User.scoped
+      text.gsub(/[%,]/, '').split.each do |t|
+        next if t.blank?
+        query = t + '%'
+        u = u.where{(first_name =~ query) | (last_name =~ query)}
+      end
+      return u
     when 'Username'
-      return where(:username.matches % query)
+      query = text.gsub('%', '') + '%'
+      return where{username =~ query}
     when 'Email'
-      return where(:email.matches % query)
-    else
-      return where(:first_name.matches % query | :last_name.matches % query |
-                   :username.matches % query | :email.matches % query)
+      query = text.gsub('%', '') + '%'
+      return where{email =~ query}
+    else # All
+      u = User.scoped
+      text.gsub(/[%,]/, '').split.each do |t|
+        next if t.blank?
+        query = t + '%'
+        u = u.where{(first_name =~ query) | (last_name =~ query) |
+                    (username =~ query) | (email =~ query)}
+      end
+      return u
     end
   end
   

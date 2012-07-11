@@ -3,11 +3,11 @@
 
 class WebsiteConfiguration < ActiveRecord::Base
 
-  # Format: {:name => [value, value_type], :name => [value, value_type]}
+  # Format: {"name" => [value, "value_type"], "name" => [value, "value_type"]}
   @@defaults = {
-                  :in_maintenance => [false, "boolean"],
-                  :use_mathjax_cdn => [true, "boolean"],
-                  :home_highlighted_questions => ["", "text"]
+                  "in_maintenance" => [false, "boolean"],
+                  "use_mathjax_cdn" => [true, "boolean"],
+                  "home_highlighted_questions" => ["", "text"]
                }
 
   validates_uniqueness_of :name
@@ -35,8 +35,9 @@ class WebsiteConfiguration < ActiveRecord::Base
     
     case configuration.value_type
     when "boolean"
-      !configuration.value.blank? && configuration.value != "f" && configuration.value != "0"
-    when "text"
+      !configuration.value.blank? && configuration.value != "f" &&\
+        configuration.value != "false" && configuration.value != "0"
+    else
       configuration.value
     end
   end
