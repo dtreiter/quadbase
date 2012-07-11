@@ -10,6 +10,8 @@ class ListMember < ActiveRecord::Base
                             :scope => :list_id,
                             :message => "This user is already a member of this list."
 
+  after_create :check_and_set_default_list
+
   after_destroy :destroy_memberless_list
 
   attr_accessible :user, :list, :user_id
@@ -39,12 +41,18 @@ class ListMember < ActiveRecord::Base
     ListMember.where{user_id == user.id}.all
   end
 
+  def check_and_set_default_list
+    if List.default_for_user(self.user) == nil
+      self.user.list_members.last.make_default!
+    end
+  end
+  
   def destroy_memberless_list
     if list.list_members.empty?
       list.destroy
     end
   end
-  
+
   #############################################################################
   # Access control methods
   #############################################################################

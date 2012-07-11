@@ -30,7 +30,8 @@ class List < ActiveRecord::Base
     default_member = ListMember.default_for_user(user)
     
     if default_member.nil?
-      new_list = List.create(:name => user.full_name + "'s List", :is_public => false, :has_publicly_viewable_drafts => false )
+      new_list = List.create(:name => user.full_name + "'s List", :is_public => false,
+                                                :has_publicly_viewable_drafts => false )
       default_member = ListMember.create(:user => user, :list => new_list)
       default_member.make_default!
     end
@@ -40,7 +41,7 @@ class List < ActiveRecord::Base
   
   def self.all_for_user(user)
     List.default_for_user!(user) if ListMember.all_for_user(user).empty?
-    ListMember.all_for_user(user).collect{|wm| wm.project}
+    ListMember.all_for_user(user).collect{|wm| wm.list}
   end
   
   def is_default_for_user?(user)

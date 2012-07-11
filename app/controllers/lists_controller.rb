@@ -26,7 +26,7 @@ class ListsController < ApplicationController
     respond_with(@lists = List.where(:is_public => true))
   end
 
-  def news
+  def new
     respond_with(@list = List.new)
   end
 
