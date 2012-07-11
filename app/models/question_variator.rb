@@ -15,7 +15,7 @@ class QuestionVariator
   
   def run(logic)
     return if logic.nil?
-    
+    debugger    
     # Run the logic, optionally, computing and storing a hash of the output
     @output = logic.run({:seed => @seed, :prior_output => @output}).tap do |output|
       @output_hash = (@output_hash || 0) + output.variables.inspect.hash if @watch_output
@@ -23,6 +23,18 @@ class QuestionVariator
   end
   
   def fill_in_variables(text)
+    debugger
+    #e = begin
+    #rescue Bullring::JSError => e
+    #  e
+    #end
+    #e = Bullring::JSError
+    #puts "\n\n\nThe exception is: "
+    #puts e.inspect
+    #if e.exception=="Error"
+    #  "<span class='undefined_variable' title='Logic error'>LOGIC ASSERTION ERROR!</span>"
+    #end
+    
     return nil if text.nil?
     text.gsub(/\=([_a-zA-Z]{1}\w*)(%[^=]*)?=/u) { |match| 
       var = @output.variables[$1]

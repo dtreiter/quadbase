@@ -33,7 +33,7 @@ class Logic < ActiveRecord::Base
   VARIABLE_REGEX = /^[_a-zA-Z]{1}\w*$/
   
   def run(options = {})
-    return Output.new # temp fix to block bullring
+    #return Output.new # temp fix to block bullring
     
     options[:seed] ||= rand(2e9)
     options[:prior_output] ||= Output.new
@@ -41,9 +41,13 @@ class Logic < ActiveRecord::Base
 
     if !code.blank?
       variable_parse_succeeds if variables_array.nil? 
+      puts "\n\n\n\nBullring about to run\n\n\n"
       results = Bullring.run(readied_script(options[:seed],options[:prior_output]),
                              {'library_names' => options[:library_version_ids]})
-  
+                               
+      puts "\n\n\n\nBullring already ran"
+      puts Bullring::JSError.inspect
+      puts "\n\n\n\n"
       options[:prior_output].store!(results)
     else
       options[:prior_output]
@@ -78,7 +82,7 @@ class Logic < ActiveRecord::Base
 protected
 
   def code_compiles
-    errors.add(:base, "Logic authoring temporarily disabled") if !code.blank?; return false  # Temp fix to block bullring
+    #errors.add(:base, "Logic authoring temporarily disabled") if !code.blank?; return false  # Temp fix to block bullring
     
     code_errors = Bullring.check(code)
     code_errors.each do |code_error|
@@ -117,7 +121,7 @@ protected
           // Exectue the logic's code block
           
           <%= code %>
-          
+
           // Build up the results object/hash.  Load each of this logic's
           // variables into the results.  Then load all of the incoming 
           // args into the results so they are also available to users of this
