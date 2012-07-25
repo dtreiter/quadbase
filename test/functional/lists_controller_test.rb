@@ -120,4 +120,16 @@ class ListsControllerTest < ActionController::TestCase
     end
     assert_redirected_to lists_path
   end
+
+  test "should show all public lists" do
+    user_login
+    get :show_public
+    assert_response :success
+  end
+
+  test "should not show all public lists not logged in" do
+    get :show_public
+    assert_redirected_to login_path
+  end
+  
 end
