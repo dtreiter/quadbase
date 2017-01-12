@@ -75,7 +75,7 @@ class List < ActiveRecord::Base
   #############################################################################
 
   def can_be_read_by?(user)
-    !user.is_anonymous? && is_member?(user) || is_public
+    is_public || !user.is_anonymous? && is_member?(user)
   end
     
   def can_be_created_by?(user)

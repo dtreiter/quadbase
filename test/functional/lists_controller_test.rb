@@ -7,6 +7,16 @@ class ListsControllerTest < ActionController::TestCase
   setup do
     @user = FactoryGirl.create(:user)
     @list = List.default_for_user!(@user)
+
+    @public_list = FactoryGirl.create(:list)
+    @public_list.is_public = true
+    @public_list.save!
+
+    @public_drafts_list = FactoryGirl.create(:list)
+    @public_drafts_list.is_public = true
+    @public_drafts_list.has_publicly_viewable_drafts = true
+    @public_drafts_list.save!
+    @question = FactoryGirl.create(:list_question, :list => @public_drafts_list).question
   end
 
   test "should not get index not logged in" do
@@ -121,15 +131,21 @@ class ListsControllerTest < ActionController::TestCase
     assert_redirected_to lists_path
   end
 
-  test "should show all public lists" do
+  test "should get all public lists" do
     user_login
     get :show_public
     assert_response :success
   end
 
-  test "should not show all public lists not logged in" do
+  test "should not get all public lists not logged in" do
     get :show_public
     assert_redirected_to login_path
   end
-  
+
+  test "should show public list questions" do
+    user_login
+    get :show, :id => @public_list.to_param
+    assert_response :success
+  end
+
 end

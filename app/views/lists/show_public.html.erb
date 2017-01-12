@@ -3,7 +3,7 @@
 
 <% @links = [ link_to('New List', new_list_path), link_to('My Lists', lists_path) ] %>
 
-<%= pageHeading("My Lists") %>
+<%= pageHeading("Public Lists") %>
 
 <table class="list" width="100%">
    <tr>
@@ -18,19 +18,11 @@
    </tr>
 
    <% @lists.each do |list| %>
-      <% member = list.list_members.first %>
      <tr>
        <td><%= link_to list.name, list_path(list) %></td>
        <td style="text-align:center"><% if list.has_publicly_viewable_drafts %>yes
                                       <% else %>no<% end %>
        <td style="text-align:center">
-         <% if member.is_default %>  
-            (DEFAULT)
-         <% else %>
-            <%= link_to "Make default", 
-                        list_member_make_default_path(member),
-                        :method => :put %>
-         <% end %>
        </td>
        <td style="text-align:center"><%= list.list_questions.size %></td>
        <td style="text-align:center"><%= list.list_members.size %></td>       

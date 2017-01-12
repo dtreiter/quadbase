@@ -40,7 +40,7 @@ Note that like a bunch of other orgs (Apache, Sun, etc), we require contributors
 to sign and submit a Contributor Agreement.  The Rice University Contributor Agreement
 (RCA) gives Rice and you the contributor joint copyright interests in the code or
 other contribution.  The contributor retains copyrights while also granting those 
-rights to Rice as the list sponsor.
+rights to Rice as the project sponsor.
 
 The RCA can be submitted for acceptance by emailing a scanned, completed, signed copy
 to info@[the quadbase domain].  Only scans of physically signed documents will be accepted.
@@ -50,7 +50,7 @@ Here's how to contribute to Quadbase:
 
 1. Send us a completed Rice Contributor Agreement
    * Download it from http://quadbase.org/rice_university_contributor_agreement_v1.pdf
-   * Complete it (where "List Name" is "Quadbase" and "Username" is your GitHub username)
+   * Complete it (where "Project Name" is "Quadbase" and "Username" is your GitHub username)
    * Sign it, scan it, and email it to info@[the quadbase domain]
 1. Fork the code from github (https://github.com/lml/quadbase)
 2. Create a thoughtfully named topic branch to contain your change
